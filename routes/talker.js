@@ -1,4 +1,5 @@
 const express = require('express');
+const { validateAuth } = require('../middleware/validateAuth');
 const { readFile, writeFile } = require('../utils/index');
 
 const talkerRoute = express.Router();
@@ -7,7 +8,7 @@ talkerRoute.get('/', async (_req, res) => {
   res.status(200).json(await readFile());
 });
 
-talkerRoute.post('/', async (req, res) => {
+talkerRoute.post('/', validateAuth, async (req, res) => {
   const { name, age, talk } = req.body;
   const talkers = await readFile();
 
