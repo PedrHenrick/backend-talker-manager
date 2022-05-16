@@ -17,5 +17,5 @@ app.get('/', (_request, response) => {
 app.use('/talker', talker);
 
 app.listen(PORT, () => {
-  console.log('Online');
+  console.log(`App on na porta ${PORT}`);
 });
