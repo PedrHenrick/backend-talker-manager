@@ -4,5 +4,5 @@ const readFile = require('../utils/index');
 const talker = express.Router();
 
 talker.get('/', async (_req, res) => {
-  res.send(await readFile());
+  res.status(200).send(await readFile());
 });
