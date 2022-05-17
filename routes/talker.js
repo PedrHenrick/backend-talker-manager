@@ -1,5 +1,6 @@
 const express = require('express');
 const { validateAuth } = require('../middleware/validateAuth');
+const { validateTalkers } = require('../middleware/validateTalkers');
 const { readFile, writeFile } = require('../utils/index');
 
 const talkerRoute = express.Router();
@@ -8,7 +9,7 @@ talkerRoute.get('/', async (_req, res) => {
   res.status(200).json(await readFile());
 });
 
-talkerRoute.post('/', validateAuth, async (req, res) => {
+talkerRoute.post('/', validateAuth, validateTalkers, async (req, res) => {
   const { name, age, talk } = req.body;
   const talkers = await readFile();
 
@@ -22,7 +23,7 @@ talkerRoute.post('/', validateAuth, async (req, res) => {
   talkers.push(newTalker);
   await writeFile(talkers);
 
-  res.status(200).json({ message: 'Insert OK' });
+  res.status(201).json(newTalker);
 });
 
 talkerRoute.get('/:id', async (req, res) => {
