@@ -9,6 +9,15 @@ talkerRoute.get('/', async (_req, res) => {
   res.status(200).json(await readFile());
 });
 
+talkerRoute.get('/search', validateAuth, async (req, res) => {
+  const { q: query } = req.query;
+  const talkers = await readFile();
+
+  const talkerResearched = talkers.filter((talker) => talker.name.includes(query));
+
+  res.status(200).json(talkerResearched);
+});
+
 talkerRoute.post('/', validateAuth, validateTalkers, async (req, res) => {
   const { name, age, talk } = req.body;
   const talkers = await readFile();
@@ -31,7 +40,7 @@ talkerRoute.get('/:id', async (req, res) => {
   const talkers = await readFile();
 
   const searchedTalker = talkers.find((talker) => talker.id === Number(id));
-  
+
   if (!searchedTalker) {
     return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   }
