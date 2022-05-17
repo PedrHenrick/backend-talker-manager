@@ -56,4 +56,21 @@ talkerRoute.put('/:id', validateAuth, validateTalkers, async (req, res) => {
   res.status(200).json(attTalker);
 });
 
+talkerRoute.delete('/:id', validateAuth, async (req, res) => {
+    const { id } = req.params;
+
+    const talkers = await readFile();
+
+    const searchedTalker = talkers.find((talker) => talker.id === Number(id));
+    if (!searchedTalker) {
+      return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+    }
+
+    talkers.splice(talkers.indexOf(searchedTalker), 1);
+
+    await writeFile(talkers);
+
+    return res.status(204).send();
+});
+
 module.exports = talkerRoute;
